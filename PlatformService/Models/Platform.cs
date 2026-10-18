@@ -7,13 +7,13 @@
         public string Publisher { get; set; }
         public string Cost { get; set; }
 
-        public Platform()
+        private Platform()
         {
 
         }
-        public Platform(int id, string name, string publisher, string cost)
+        public Platform(string name, string publisher, string cost)
         {
-            Id = id;
+            Id = Random.Shared.Next();
             Name = name;
             Publisher = publisher;
             Cost = cost;

@@ -27,4 +27,7 @@ app.UseAuthorization();
 
 app.MapControllers();
 
+//seed DB
+PrepDB.PrepPopulation(app);
+
 app.Run();
