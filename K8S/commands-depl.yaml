@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: commandservice
-          image: binarythistle/commandservice:latest
+          image: arsenyoo/commandservice:latest
 ---
 apiVersion: v1
 kind: Service
@@ -28,4 +28,4 @@ spec:
   - name: commandservice
     protocol: TCP
     port: 80
-    targetPort: 80 
+    targetPort: 8080
