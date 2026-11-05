@@ -10,8 +10,21 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 builder.Services.AddOpenApi();
-builder.Services.AddDbContext<AppDbContext>(opt =>
-    opt.UseInMemoryDatabase("InMem"));
+
+
+if (builder.Environment.IsProduction())
+{
+    Console.WriteLine($"--> Using SQL Server: is prod: {builder.Environment.IsProduction()}");
+    builder.Services.AddDbContext<AppDbContext>(opt =>
+        opt.UseSqlServer(builder.Configuration.GetConnectionString("PlatformsConnection")));
+}
+else
+{
+    Console.WriteLine($"--> Using In-Memory DB is prod: {builder.Environment.IsProduction()}");
+    builder.Services.AddDbContext<AppDbContext>(opt =>
+        opt.UseInMemoryDatabase("InMem"));
+}
+
 
 builder.Services.AddScoped<IPlatformRepo, PlatformRepo>();
 
