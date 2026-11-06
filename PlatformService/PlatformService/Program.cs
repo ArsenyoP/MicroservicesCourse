@@ -46,6 +46,6 @@ app.UseAuthorization();
 app.MapControllers();
 
 //seed DB
-PrepDB.PrepPopulation(app);
+PrepDB.PrepPopulation(app, builder.Environment.IsProduction());
 
 app.Run();
