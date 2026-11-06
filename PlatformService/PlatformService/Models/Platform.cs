@@ -13,7 +13,6 @@
         }
         public Platform(string name, string publisher, string cost)
         {
-            Id = Random.Shared.Next();
             Name = name;
             Publisher = publisher;
             Cost = cost;
