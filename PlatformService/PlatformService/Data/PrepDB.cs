@@ -5,11 +5,11 @@ namespace PlatformService.Data
 {
     public static class PrepDB
     {
-        public static void PrepPopulation(IApplicationBuilder app, bool isProd)
+        public static async Task PrepPopulation(IApplicationBuilder app, bool isProd)
         {
             using (var serviceScope = app.ApplicationServices.CreateScope())
             {
-                Seed(serviceScope.ServiceProvider.GetService<AppDbContext>(), isProd);
+                await Seed(serviceScope.ServiceProvider.GetService<AppDbContext>(), isProd);
             }
         }
 
@@ -20,11 +20,19 @@ namespace PlatformService.Data
                 Console.WriteLine("Starting migrations:");
                 try
                 {
+                    var connection = context.Database.GetDbConnection();
+
+                    Console.WriteLine($"DB Server: {connection.DataSource}");
+                    Console.WriteLine($"DB Name: {connection.Database}");
+                    Console.WriteLine($"DB User: {connection.ConnectionString
+                        .Split(';')
+                        .FirstOrDefault(x => x.TrimStart().StartsWith("User Id=", StringComparison.OrdinalIgnoreCase))}");
+
                     await context.Database.MigrateAsync();
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine($"Exception while migration: {ex.Message}");
+                    Console.WriteLine($"Exception while migration: {ex}");
                 }
             }
 
@@ -38,7 +46,7 @@ namespace PlatformService.Data
                     new Platform("Kubernetes", "Cloud Native Computing Foundation", "Free")
                     );
 
-                context.SaveChanges();
+                await context.SaveChangesAsync();
             }
             else
             {

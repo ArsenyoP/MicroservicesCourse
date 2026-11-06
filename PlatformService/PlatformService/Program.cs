@@ -14,6 +14,8 @@ builder.Services.AddOpenApi();
 
 if (builder.Environment.IsProduction())
 {
+    Console.WriteLine($"Connection string: {builder.Configuration.GetConnectionString("PlatformsConnection")}");
+
     Console.WriteLine($"--> Using SQL Server: is prod: {builder.Environment.IsProduction()}");
     builder.Services.AddDbContext<AppDbContext>(opt =>
         opt.UseSqlServer(builder.Configuration.GetConnectionString("PlatformsConnection")));
@@ -46,6 +48,6 @@ app.UseAuthorization();
 app.MapControllers();
 
 //seed DB
-PrepDB.PrepPopulation(app, builder.Environment.IsProduction());
+await PrepDB.PrepPopulation(app, builder.Environment.IsProduction());
 
 app.Run();
