@@ -35,6 +35,11 @@ namespace CommandService.Repositories
             _dbContext.Platforms.Add(platform);
         }
 
+        public async Task<IEnumerable<Command>> GetAllCommands(CancellationToken ct = default)
+        {
+            return await _dbContext.Commands.ToListAsync(ct);
+        }
+
         public async Task<IEnumerable<Platform>> GetAllPlatformsAsync(CancellationToken ct = default)
         {
             return await _dbContext.Platforms.ToListAsync(ct);

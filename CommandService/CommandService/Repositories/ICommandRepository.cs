@@ -4,6 +4,7 @@ namespace CommandService.Repositories;
 
 public interface ICommandRepository
 {
+    Task<IEnumerable<Command>> GetAllCommands(CancellationToken ct = default);
     Task<bool> SaveChangesAsync(CancellationToken ct = default);
     Task<IEnumerable<Platform>> GetAllPlatformsAsync(CancellationToken ct = default);
     void CreatePlatform(Platform platform);
