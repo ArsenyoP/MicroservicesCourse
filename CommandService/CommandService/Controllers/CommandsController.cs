@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using CommandService.DTOs;
+using CommandService.Models;
 using CommandService.Repositories;
 using Microsoft.AspNetCore.Mvc;
 
@@ -25,6 +26,7 @@ namespace CommandService.Controllers
 
             if (!await _commandRepository.PlatformExists(platformId, ct))
             {
+                Console.WriteLine(await _commandRepository.PlatformExists(platformId, ct));
                 return NotFound();
             }
 
@@ -52,6 +54,27 @@ namespace CommandService.Controllers
             }
 
             return Ok(_mapper.Map<CommandReadDto>(command));
+        }
+
+        [HttpPost]
+        public async Task<ActionResult<CommandReadDto>> CreateCommandForPlatform(int platformId, CommandCreatreDto createDto, CancellationToken ct = default)
+        {
+            Console.WriteLine($"--> Hitted CreateCommandForPlatform account: {createDto}, platform id: {platformId}");
+
+            if (await _commandRepository.PlatformExists(platformId, ct))
+            {
+                return NotFound();
+            }
+
+            var command = _mapper.Map<Command>(createDto);
+
+            _commandRepository.CreateCommand(platformId, command);
+            await _commandRepository.SaveChangesAsync(ct);
+
+            var commandReadDto = _mapper.Map<CommandReadDto>(command);
+
+            return CreatedAtRoute(nameof(GetCommandForPlatform),
+                new { platformId = platformId, commandId = commandReadDto.Id }, commandReadDto);
         }
     }
 }

@@ -60,7 +60,7 @@ namespace CommandService.Repositories
             return await _dbContext.Platforms.AnyAsync(p => p.Id == platformId);
         }
 
-        public async Task<bool> SaveChanges(CancellationToken ct = default)
+        public async Task<bool> SaveChangesAsync(CancellationToken ct = default)
         {
             return await _dbContext.SaveChangesAsync(ct) >= 0;
         }
