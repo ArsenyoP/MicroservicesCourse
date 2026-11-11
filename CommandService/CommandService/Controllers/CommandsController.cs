@@ -46,7 +46,7 @@ namespace CommandService.Controllers
                 return NotFound();
             }
 
-            var command = _commandRepository.GetCommand(platformId, commandId);
+            var command = await _commandRepository.GetCommand(platformId, commandId);
 
             if (command == null)
             {
