@@ -19,6 +19,16 @@ namespace CommandService.Controllers
             _mapper = mapper;
         }
 
+        [HttpGet("commands")]
+        public async Task<ActionResult<IEnumerable<CommandReadDto>>> GetAllCommands(CancellationToken ct = default)
+        {
+            var commandObjects = await _commandRepository.GetAllCommands(ct);
+
+            var commandDtos = _mapper.Map<IEnumerable<CommandReadDto>>(commandObjects);
+
+            return Ok(commandDtos);
+        }
+
         [HttpGet]
         public async Task<ActionResult<IEnumerable<CommandReadDto>>> GetCommandsForPlatform(int platformId, CancellationToken ct = default)
         {
@@ -46,7 +56,7 @@ namespace CommandService.Controllers
                 return NotFound();
             }
 
-            var command = _commandRepository.GetCommand(platformId, commandId);
+            var command = await _commandRepository.GetCommand(platformId, commandId);
 
             if (command == null)
             {
