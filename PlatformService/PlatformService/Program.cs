@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using PlatformService.AsyncDataServices;
 using PlatformService.Data;
 using PlatformService.Interfaces;
 using PlatformService.Repositories;
@@ -27,6 +28,8 @@ else
         opt.UseInMemoryDatabase("InMem"));
 }
 
+
+builder.Services.AddSingleton<IMessageBusClient, MessageBusClient>();
 
 builder.Services.AddScoped<IPlatformRepo, PlatformRepo>();
 
