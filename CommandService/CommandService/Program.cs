@@ -1,4 +1,5 @@
 using CommandService.Data;
+using CommandService.EventProcessing;
 using CommandService.Repositories;
 using Microsoft.EntityFrameworkCore;
 
@@ -13,6 +14,7 @@ builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 builder.Services.AddDbContext<AppDbContext>(opt => opt.UseInMemoryDatabase("InMem"));
 
+builder.Services.AddSingleton<IEventProcessor, EventProcessor>();
 builder.Services.AddScoped<ICommandRepository, CommandRepository>();
 
 var app = builder.Build();
