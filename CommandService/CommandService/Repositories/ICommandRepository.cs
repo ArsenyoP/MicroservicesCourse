@@ -9,6 +9,8 @@ public interface ICommandRepository
     Task<IEnumerable<Platform>> GetAllPlatformsAsync(CancellationToken ct = default);
     void CreatePlatform(Platform platform);
     Task<bool> PlatformExists(int platformId, CancellationToken ct = default);
+    Task<bool> ExternalPlatformExists(int externalPlatformId, CancellationToken ct = default);
+
 
     Task<IEnumerable<Command>> GetCommandsForPlatform(int platformId, CancellationToken ct = default);
     Task<Command?> GetCommand(int platformId, int commandId, CancellationToken ct = default);

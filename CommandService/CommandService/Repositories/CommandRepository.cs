@@ -35,6 +35,11 @@ namespace CommandService.Repositories
             _dbContext.Platforms.Add(platform);
         }
 
+        public async Task<bool> ExternalPlatformExists(int externalPlatformId, CancellationToken ct = default)
+        {
+            return await _dbContext.Platforms.AnyAsync(p => p.ExternalId == externalPlatformId);
+        }
+
         public async Task<IEnumerable<Command>> GetAllCommands(CancellationToken ct = default)
         {
             return await _dbContext.Commands.ToListAsync(ct);
