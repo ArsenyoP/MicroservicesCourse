@@ -36,6 +36,7 @@ builder.Services.AddScoped<IPlatformRepo, PlatformRepo>();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 builder.Services.AddHttpClient<ICommandDataClient, HttpCommandDataClient>();
+builder.Services.AddGrpc();
 
 var app = builder.Build();
 
@@ -52,5 +53,10 @@ app.MapControllers();
 
 //seed DB
 await PrepDB.PrepPopulation(app, builder.Environment.IsProduction());
+
+app.MapGet("/protos/platforms.proto", async context =>
+{
+    await context.Response.WriteAsync(await File.ReadAllTextAsync("Protos/platforms.proto"));
+});
 
 app.Run();
