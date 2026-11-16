@@ -30,17 +30,17 @@ namespace PlatformService.Controllers
         }
 
         [HttpGet]
-        public ActionResult<IEnumerable<PlatformReadDto>> GetPlatforms()
+        public async Task<ActionResult<IEnumerable<PlatformReadDto>>> GetPlatforms(CancellationToken cancellationToken = default)
         {
-            var platformItems = _platformRepo.GetAllPlatforms();
+            var platformItems = await _platformRepo.GetAllPlatformsAsync(cancellationToken);
 
             return Ok(_mapper.Map<IEnumerable<PlatformReadDto>>(platformItems));
         }
 
         [HttpGet("{id}", Name = "GetPLatformById")]
-        public ActionResult<PlatformReadDto> GetPlatformById(int id)
+        public async Task<ActionResult<PlatformReadDto>> GetPlatformById(int id, CancellationToken cancellationToken = default)
         {
-            var platformItem = _platformRepo.GetPlatformById(id);
+            var platformItem = await _platformRepo.GetPlatformByIdAsync(id, cancellationToken);
 
             if (platformItem != null)
             {
@@ -67,8 +67,8 @@ namespace PlatformService.Controllers
                 return BadRequest();
             }
 
-            _platformRepo.CreatePlatform(platformItem);
-            _platformRepo.SaveChanges();
+            await _platformRepo.CreatePlatformAsync(platformItem);
+            await _platformRepo.SaveChangesAsync();
 
             var platformReadDto = _mapper.Map<PlatformReadDto>(platformItem);
 
