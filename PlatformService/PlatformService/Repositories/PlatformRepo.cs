@@ -1,6 +1,8 @@
-﻿using PlatformService.Data;
+﻿using Microsoft.EntityFrameworkCore;
+using PlatformService.Data;
 using PlatformService.Interfaces;
 using PlatformService.Models;
+using System.Threading;
 
 namespace PlatformService.Repositories
 {
@@ -13,29 +15,29 @@ namespace PlatformService.Repositories
             _context = context;
         }
 
-        public void CreatePlatform(Platform platform)
+        public async Task CreatePlatformAsync(Platform platform, CancellationToken cancellationToken = default)
         {
             if (platform == null)
             {
                 throw new ArgumentNullException(nameof(platform));
             }
 
-            _context.Platforms.Add(platform);
+            await _context.Platforms.AddAsync(platform, cancellationToken);
         }
 
-        public IEnumerable<Platform> GetAllPlatforms()
+        public async Task<IEnumerable<Platform>> GetAllPlatformsAsync(CancellationToken cancellationToken = default)
         {
-            return _context.Platforms.ToList();
+            return await _context.Platforms.ToListAsync(cancellationToken);
         }
 
-        public Platform? GetPlatformById(int id)
+        public async Task<Platform?> GetPlatformByIdAsync(int id, CancellationToken cancellationToken = default)
         {
-            return _context.Platforms.FirstOrDefault(x => x.Id == id);
+            return await _context.Platforms.FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
         }
 
-        public bool SaveChanges()
+        public async Task<bool> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
-            return (_context.SaveChanges() >= 0);
+            return (await _context.SaveChangesAsync(cancellationToken) >= 0);
         }
     }
 }

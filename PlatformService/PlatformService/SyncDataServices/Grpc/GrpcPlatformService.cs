@@ -15,17 +15,17 @@ namespace PlatformService.SyncDataServices.Grpc
             _mapper = mapper;
         }
 
-        public override Task<platformResponse> GetAllPlatforms(GetAllRequests request, ServerCallContext context)
+        public override async Task<platformResponse> GetAllPlatforms(GetAllRequests request, ServerCallContext context)
         {
             var response = new platformResponse();
-            var platforms = _platformRepo.GetAllPlatforms();
+            var platforms = await _platformRepo.GetAllPlatformsAsync(context.CancellationToken);
 
             foreach (var plat in platforms)
             {
                 response.Platform.Add(_mapper.Map<GrpcPlatformModel>(plat));
             }
 
-            return Task.FromResult(response);
+            return response;
         }
     }
 }
