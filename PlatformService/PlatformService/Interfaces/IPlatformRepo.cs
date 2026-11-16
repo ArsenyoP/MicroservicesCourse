@@ -1,12 +1,13 @@
 ﻿using PlatformService.Models;
+using System.Threading;
 
 namespace PlatformService.Interfaces
 {
     public interface IPlatformRepo
     {
-        public bool SaveChanges();
-        public IEnumerable<Platform> GetAllPlatforms();
-        public Platform? GetPlatformById(int id);
-        public void CreatePlatform(Platform platform);
+        Task<bool> SaveChangesAsync(CancellationToken cancellationToken = default);
+        Task<IEnumerable<Platform>> GetAllPlatformsAsync(CancellationToken cancellationToken = default);
+        Task<Platform?> GetPlatformByIdAsync(int id, CancellationToken cancellationToken = default);
+        Task CreatePlatformAsync(Platform platform, CancellationToken cancellationToken = default);
     }
 }
