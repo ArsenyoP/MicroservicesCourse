@@ -14,6 +14,12 @@ namespace CommandService.Data
 
                 var platforms = await grpcClient!.ReturnAllPlatforms();
 
+                if (platforms is null)
+                {
+                    Console.WriteLine("--> No platforms returned from gRPC; skipping seed");
+                    return;
+                }
+
                 await SeedData(serviceScope.ServiceProvider.GetService<ICommandRepository>()!, platforms);
             }
         }
@@ -24,7 +30,7 @@ namespace CommandService.Data
 
             foreach (var plat in platforms)
             {
-                if (await repo.ExternalPlatformExists(plat.Id, ct))
+                if (!await repo.ExternalPlatformExists(plat.Id, ct))
                 {
                     repo.CreatePlatform(plat);
                 }
