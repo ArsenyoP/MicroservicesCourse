@@ -3,6 +3,7 @@ using PlatformService.AsyncDataServices;
 using PlatformService.Data;
 using PlatformService.Interfaces;
 using PlatformService.Repositories;
+using PlatformService.SyncDataServices.Grpc;
 using PlatformService.SyncDataServices.Http;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -58,5 +59,7 @@ app.MapGet("/protos/platforms.proto", async context =>
 {
     await context.Response.WriteAsync(await File.ReadAllTextAsync("Protos/platforms.proto"));
 });
+
+app.MapGrpcService<GrpcPlatformService>();
 
 app.Run();
